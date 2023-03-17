@@ -17,4 +17,3 @@ if __name__ == '__main__':
     i = cur.fetchall()
     for i in i:
         print(i)
- 
