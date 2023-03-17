@@ -1,13 +1,16 @@
 #!/usr/bin/python3
 """
-    A script that changes teh name of a State object in hbtn_0e_6_usa
+    A script that prints all City objects from the database hbtn_0e_6_usa
+
 """
 
 
 import sys
 from model_state import Base, State
+from model_city import City
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+
 
 if __name__ == '__main__':
     engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.format(
@@ -15,16 +18,18 @@ if __name__ == '__main__':
                            pool_pre_ping=True)
 
     Session = sessionmaker(bind=engine)
-
     Base.metadata.create_all(engine)
 
 
     session = Session()
 
 
-    rename_state = session.query(State) \
-                          .filter(State.id == 2).first()
-    rename_state.name = 'New Mexico'
-    session.commit()
+    cities = session.query(State, City) \
+                    .filter(State.id == City.state_id)
+
+
+
+    for ci in cities:
+        print("{}: ({}) {}".format(ci.State.name, ci.City.id, ci.City.name))
 
     session.close()
